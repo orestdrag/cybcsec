@@ -1,0 +1,9 @@
+Building CybCSec
+
+See doc/readme-qt.rst for instructions on building CybCSec QT,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of CybCSec.
+
+See doc/build-*.txt for instructions on building cybcsecd,
+the intended-for-services, no-graphical-interface, reference
+implementation of CybCSec.
