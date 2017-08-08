@@ -1,4 +1,4 @@
-![logo](http://i.imgur.com/CZjeuSw.png)
+![logo](http://i.imgur.com/9ufqkgK.png)
 Specifications:
 ==========================
 * Total number of coins: 250,000,000 XCS
