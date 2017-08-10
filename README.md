@@ -22,5 +22,5 @@ Inside:
 
 LINKS
 ==========================
-* [Official Website](http://www.cybcsecits.com/)
+* [Official Website](http://www.cybcsec.com/)
 
