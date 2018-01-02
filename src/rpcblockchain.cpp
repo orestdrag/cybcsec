@@ -305,12 +305,31 @@ int64_t getvoutvalue(const COutPoint & outPoint)
     }
 }
 
+//get value from prev transaction
+bool extractvoutvalue(const COutPoint & outPoint, std::map<CTxDestination, int64_t>& balances)
+{
+    unsigned int n = outPoint.n;
+    uint256 hashBlock = 0, hash = outPoint.hash;
+    CTransaction tx;
+    CTxDestination address;
+
+    if (GetTransaction(hash, tx, hashBlock))
+    {
+        if(tx.vout.size()>n && ExtractDestination(tx.vout[n].scriptPubKey,address))
+        {
+           if(!balances.count(address))
+               balances[address] = 0;
+           balances[address] -= tx.vout[n].nValue;
+        }
+        return false;
+    }
+}
+
+
 //change balances map, fetching data from tx
 void TransactionToBalances(const CTransaction& tx, std::map<CTxDestination, int64_t>& balances)
 {
-    //*
     //param
-    std::vector<CTxDestination> addresses;
     CTxDestination address;
     //other
     txnouttype type;
@@ -325,15 +344,10 @@ void TransactionToBalances(const CTransaction& tx, std::map<CTxDestination, int6
             balances[address] += vout.nValue;
          }
      }
-    //minus v_in - TO DO
+    //minus v_in
      BOOST_FOREACH(const CTxIn & vin, tx.vin)
      {
-         if(ExtractDestination(vin.scriptSig,address))
-         {
-            if(!balances.count(address))
-                balances[address] = 0;
-            balances[address] -= getvoutvalue(vin.prevout);
-         }
+        extractvoutvalue(vin.prevout, balances);
      }
 }
 
