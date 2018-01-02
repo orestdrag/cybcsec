@@ -271,7 +271,7 @@ static const CRPCCommand vRPCCommands[] =
     { "orest",                  &orest,                  true,      true,      false },
     { "allbalances",            &allbalances,            true,      true,      false },
     { "testtxtobalances",       &testtxtobalances,       true,      true,      false },
-    { "getalltxhashes",         &getalltxhashes,         true,      true,      false },
+    { "getallbalances",         &getallbalances,         true,      true,      false },
     { "help",                   &help,                   true,      true,      false },
     { "stop",                   &stop,                   true,      true,      false },
     { "getbestblockhash",       &getbestblockhash,       true,      false,     false },

@@ -200,7 +200,7 @@ extern json_spirit::Value getdifficulty(const json_spirit::Array& params, bool f
 //
 extern json_spirit::Value orest(const json_spirit::Array& params, bool fHelp);
 extern json_spirit::Value allbalances(const json_spirit::Array& params, bool fHelp);
-extern json_spirit::Value getalltxhashes(const json_spirit::Array& params, bool fHelp); // in rpcblockchain.cpp
+extern json_spirit::Value getallbalances(const json_spirit::Array& params, bool fHelp); // in rpcblockchain.cpp
 extern json_spirit::Value testtxtobalances(const json_spirit::Array& params, bool fHelp);
 
 //
