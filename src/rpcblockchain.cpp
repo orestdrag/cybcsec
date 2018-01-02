@@ -9,8 +9,11 @@
 #include "txdb.h"
 #include "kernel.h"
 #include "checkpoints.h"
+#include "bloom.h"
 #include <errno.h>
-
+#include <string>
+#include <boost/foreach.hpp>
+#include <boost/variant.hpp>
 
 using namespace json_spirit;
 using namespace std;
@@ -289,6 +292,212 @@ Value getbestblockhash(const Array& params, bool fHelp)
     return hashBestChain.GetHex();
 }
 
+
+void TransactionToBalances(const CTransaction& tx, std::map<CTxDestination, long>& balances)
+{
+    //param
+    std::vector<CTxDestination> addresses;
+    CTxDestination address;
+    //other
+    txnouttype type;
+    int nRequired;
+
+    //plus v_outs
+     BOOST_FOREACH(const CTxOut & vout, tx.vout){
+         if(ExtractDestination(vout.scriptPubKey,address))
+         {
+            if(!balances.count(address))
+                balances[address] = 0;
+            balances[address] += vout.nValue;
+         }else if(ExtractDestinations(vout.scriptPubKey, type, addresses, nRequired)) {//multisign -TO DO
+
+         }else{//fail
+             //addresses = NULL;
+             address=NULL;
+             return;
+         }
+     }
+    //minus v_in - TO DO
+     BOOST_FOREACH(const CTxIn & vin, tx.vin)
+     {
+         if(ExtractDestination(vin.scriptSig,address))
+         {
+            if(!balances.count(address))
+                balances[address] = 0;
+
+            //balances[address] -= vin.nValue;
+         }else if(ExtractDestinations(vin.scriptSig, type, addresses, nRequired)) {//multisign -TO DO
+
+         }else{//fail
+             //addresses = NULL;
+             address=NULL;
+             return;
+         }
+     }
+}
+/*
+Value gettransaction(const Array& params, bool fHelp)
+{
+    if (fHelp || params.size() != 1)
+        throw std::runtime_error(
+            "gettransaction <txid>\n"
+            "Get detailed information about <txid>");
+
+    uint256 hash;
+    hash.SetHex(params[0].get_str());
+
+    Object entry;
+
+    if (pwalletMain->mapWallet.count(hash))
+    {
+        const CWalletTx& wtx = pwalletMain->mapWallet[hash];
+
+        TxToJSON(wtx, 0, entry);
+
+        int64_t nCredit = wtx.GetCredit();
+        int64_t nDebit = wtx.GetDebit();
+        int64_t nNet = nCredit - nDebit;
+        int64_t nFee = (wtx.IsFromMe() ? wtx.GetValueOut() - nDebit : 0);
+
+        entry.push_back(Pair("amount", ValueFromAmount(nNet - nFee)));
+        if (wtx.IsFromMe())
+            entry.push_back(Pair("fee", ValueFromAmount(nFee)));
+
+        WalletTxToJSON(wtx, entry);
+
+        Array details;
+        ListTransactions(pwalletMain->mapWallet[hash], "*", 0, false, details);
+        entry.push_back(Pair("details", details));
+    } else
+    {
+        CTransaction tx;
+        uint256 hashBlock = 0;
+        if (GetTransaction(hash, tx, hashBlock))
+        {
+            TxToJSON(tx, 0, entry);
+            if (hashBlock == 0)
+            {
+                entry.push_back(Pair("confirmations", 0));
+            } else
+            {
+                entry.push_back(Pair("blockhash", hashBlock.GetHex()));
+                std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.find(hashBlock);
+                if (mi != mapBlockIndex.end() && (*mi).second)
+                {
+                    CBlockIndex* pindex = (*mi).second;
+                    if (pindex->IsInMainChain())
+                        entry.push_back(Pair("confirmations", 1 + nBestHeight - pindex->nHeight));
+                    else
+                        entry.push_back(Pair("confirmations", 0));
+                };
+            };
+        } else
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No information available about transaction");
+    };
+
+    return entry;
+}
+
+//*/
+Value testtxtobalances(const Array& params, bool fHelp)
+{
+    Object result;
+
+    uint256 hash,hashBlock=0;
+    CTransaction tx;
+    std::map<CTxDestination, long> balances;
+    char buffer[33];
+
+    hash.SetHex(params[0].get_str());
+
+    //std::map< std::string, std::set<int> > m;
+    //BOOST_FOREACH(const std::pair< std::string, std::set<int> > &d, m)
+    //      d.first // access the key
+
+
+    typedef std::pair<CTxDestination, long> bal_pair;
+    if (GetTransaction(hash, tx, hashBlock))
+    {
+        TransactionToBalances(tx,balances);
+        BOOST_FOREACH(const bal_pair &bal, balances){
+
+            itoa((int)bal.second,buffer,10);
+
+            result.push_back(Pair("address", CBitcoinAddress(bal.first).ToString()));
+            result.push_back(Pair("balance", buffer));
+        }
+    }else{
+
+    };
+    return result;
+}
+Value getalltxhashes(const Array& params, bool fHelp)
+{
+    int nHeight = 0;// from top of blocks stack to nHeight(0 - is to blockchain start)
+    //nBestHeight
+    nHeight = nBestHeight - 10;
+    CBlock block;
+    Object result;
+
+    //helpful
+    int index = 0;
+    char buffer [33];
+
+    //map for storing address and balance
+    std::map<string, int> mapKeyBalance();
+    std::vector<CTxDestination> addresses;
+    int incoming, outcoming;
+
+    for(CBlockIndex* pblockindex = mapBlockIndex[hashBestChain];
+        pblockindex->nHeight > nHeight;
+        pblockindex = pblockindex->pprev)
+    {
+        uint256 hash = *pblockindex->phashBlock;
+        pblockindex = mapBlockIndex[hash];
+        block.ReadFromDisk(pblockindex, true);
+
+        //transactions in block
+        Array txinfo;
+        incoming = outcoming = 0;
+        BOOST_FOREACH (const CTransaction& tx, block.vtx)
+        {
+            //auto dest = tx.
+            //if(mapKeyBalance.count())
+            //if((tx))
+            txinfo.push_back(tx.GetHash().GetHex());
+            //tx.GetValueIn()
+            //tx.GetValueOut();
+            //tx.vin
+            //tx.vout[0]tx
+
+
+        }
+
+        //result.push_back(Pair(hash, txinfo));
+        index++;
+        itoa(index,buffer,10);
+
+        result.push_back(Pair(buffer, txinfo));
+    }
+
+    return result;
+}
+
+
+Value orest(const Array& params, bool fHelp)
+{
+    return  "This is my command!";
+    //
+    Object obj;
+    //ExtKeyMap::iterator itl = mapExtKeys.begin();
+    //for (itl = mapExtKeys.begin(); itl != mapExtKeys.end(); ++itl)
+    //    if (itl->second)
+    //        obj.push_back(itl);
+    //obj.push_back(Pair("proof-of-work",        GetDifficulty()));
+    //obj.push_back(Pair("proof-of-stake",       GetDifficulty(GetLastBlockIndex(pindexBest, true))));
+    //obj.push_back(Pair("search-interval",      (int)nLastCoinStakeSearchInterval));
+    return obj;
+}
 Value getblockcount(const Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
@@ -472,6 +681,9 @@ Value getblockbynumber(const Array& params, bool fHelp)
 
     return blockToJSON(block, pblockindex, params.size() > 1 ? params[1].get_bool() : false);
 }
+
+
+
 
 Value setbestblockbyheight(const Array& params, bool fHelp)
 {

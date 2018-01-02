@@ -103,6 +103,7 @@ public:
 
 static const CRPCConvertParam vRPCConvertParams[] =
 {
+    { "testtxtobalances", 1 },
     { "stop", 0 },
     { "getaddednodeinfo", 0 },
     { "sendtoaddress", 1 },
@@ -131,6 +132,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
     { "walletpassphrase", 2 },
     { "getblocktemplate", 0 },
     { "listsinceblock", 1 },
+    { "getalltxhashes", 0 },
     { "clearwallettransactions", 0},
     { "scanforalltxns", 0 },
     { "scanforstealthtxns", 0 },

@@ -7,31 +7,6 @@ CONFIG += no_include_pwd
 CONFIG += thread
 CONFIG += static
 
-#INCLUDEPATH += C:\MinGW\msys\1.0\local\include
-	
-    #LIBEVENT_INCLUDE_PATH=C:\MinGW\msys\1.0\local\include
-    #LIBEVENT_LIB_PATH=C:\deps\32\libevent-2.0.22\.libs
-    #LIBEVENT_LIB_PATH=C:\MinGW\msys\1.0\local\lib
-	
-    #BOOST_LIB_SUFFIX=-mgw49-mt-s-1_55
-    #BOOST_INCLUDE_PATH=C:\deps\32\boost_1_55_0
-    #BOOST_LIB_PATH=C:\deps\32\boost_1_55_0\stage\lib
-
-    #BDB_INCLUDE_PATH=C:\deps\32\db-4.8.30.NC\build_unix
-    #BDB_LIB_PATH=C:\deps\32\db-4.8.30.NC\build_unix
-	
-    #OPENSSL_INCLUDE_PATH=C:\deps\32\openssl-1.0.1j\include
-    #OPENSSL_LIB_PATH=C:\deps\32\openssl-1.0.1j
-
-#    MINIUPNPC_INCLUDE_PATH=C:\deps\32\miniupnpc
- #   MINIUPNPC_LIB_PATH=C:\deps\32\miniupnpc
-
-# Mobile devices
-android:ios{
-    CONFIG += mobility
-    MOBILITY =
-}
-
 greaterThan(QT_MAJOR_VERSION, 4) {
     DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0
 }
@@ -51,82 +26,36 @@ MOC_DIR = build
 UI_DIR = build
 RESOURCES = cybcsec.qrc
 
-android {
-    INCLUDEPATH += src/qt/android
-
-    QT += androidextras
-
-    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
-
-    OTHER_FILES +=
-
-    HEADERS +=
-    SOURCES +=
-
-    OBJECTS_DIR = build-android
-    MOC_DIR = build-android
-    UI_DIR = build-android
-} else {
-
     QT += widgets webkitwidgets
-}
+    INCLUDEPATH += C:\MinGW\msys\1.0\local\include
 
-build_macosx64 {
-    QMAKE_TARGET_BUNDLE_PREFIX = co.cybcsec
-    BOOST_LIB_SUFFIX=-mt
-    BOOST_INCLUDE_PATH=/usr/local/Cellar/boost/1.61.0_1/include
-    BOOST_LIB_PATH=/usr/local/Cellar/boost/1.61.0_1/lib
+    LIBEVENT_INCLUDE_PATH=C:\dep\libevent-2.0.22-stable\include
+    LIBEVENT_LIB_PATH=C:\dep\libevent-2.0.22-stable\.libs
 
-    BDB_INCLUDE_PATH=/usr/local/opt/berkeley-db4/include
-    BDB_LIB_PATH=/usr/local/Cellar/berkeley-db4/4.8.30/lib
-
-    OPENSSL_INCLUDE_PATH=/usr/local/opt/openssl/include
-    OPENSSL_LIB_PATH=/usr/local/opt/openssl/lib
-
-    #MINIUPNPC_INCLUDE_PATH=/usr/local/opt/miniupnpc/include
-    #MINIUPNPC_LIB_PATH=/usr/local/Cellar/miniupnpc/1.8.20131007/lib
-    MINIUPNPC_INCLUDE_PATH=/usr/local/Cellar/miniupnpc/2.0/include
-    MINIUPNPC_LIB_PATH=/usr/local/Cellar/miniupnpc/2.0/lib
-
-    QMAKE_CXXFLAGS += -arch x86_64 -stdlib=libc++
-    QMAKE_CFLAGS += -arch x86_64
-    QMAKE_LFLAGS += -arch x86_64 -stdlib=libc++
-    USE_UPNP=1
-
-}
-build_win32 {
-
-    LIBEVENT_INCLUDE_PATH=C:\MinGW\msys\1.0\local\include
-    #LIBEVENT_LIB_PATH=C:\deps\32\libevent-2.0.22\.libs
-    LIBEVENT_LIB_PATH=C:\MinGW\msys\1.0\local\lib
-	
+    #BOOST_LIB_SUFFIX=-mgw53-mt-1_55
+    #BOOST_INCLUDE_PATH=C:\boost_1_55_0\boost_mingw_53_32\include\boost-1_55
+    #BOOST_LIB_PATH=C:\boost_1_55_0\boost_mingw_53_32\lib
     BOOST_LIB_SUFFIX=-mgw49-mt-s-1_55
-    BOOST_INCLUDE_PATH=C:\deps\32\boost_1_55_0
-    BOOST_LIB_PATH=C:\deps\32\boost_1_55_0\stage\lib
+    BOOST_INCLUDE_PATH=C:\dep\boost\boost_1_55_0
+    BOOST_LIB_PATH=C:\dep\boost\boost_1_55_0\stage\lib
 
-    BDB_INCLUDE_PATH=C:\deps\32\db-4.8.30.NC\build_unix
-    BDB_LIB_PATH=C:\deps\32\db-4.8.30.NC\build_unix
-	
-    OPENSSL_INCLUDE_PATH=C:\deps\32\openssl-1.0.1j\include
-    OPENSSL_LIB_PATH=C:\deps\32\openssl-1.0.1j
 
-    MINIUPNPC_INCLUDE_PATH=C:\deps\32\miniupnpc
-    MINIUPNPC_LIB_PATH=C:\deps\32\miniupnpc
+    BDB_INCLUDE_PATH=C:\dep\db-4.8.30.NC\db-4.8.30.NC\build_unix
+    BDB_LIB_PATH=C:\dep\db-4.8.30.NC\db-4.8.30.NC\build_unix
 
-        #USE_BUILD_INFO = 1
-        DEFINES += HAVE_BUILD_INFO
+    OPENSSL_INCLUDE_PATH=C:\dep\openssl-1.0.1l\include
+    #??
+    OPENSSL_LIB_PATH=C:\dep\openssl-1.0.1l
 
-    #USE_UPNP=-
-}
+    MINIUPNPC_INCLUDE_PATH=C:\dep
+    MINIUPNPC_LIB_PATH=C:\dep\miniupnpc
+
+    DEFINES += HAVE_BUILD_INFO
 
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
     CONFIG += static
 
-    !windows:!macx {
-        # Linux: static link
-        LIBS += -Wl,-Bstatic
-    }
 }
 
 # for extra security against potential buffer overflows: enable GCCs Stack Smashing Protection
@@ -135,8 +64,10 @@ QMAKE_LFLAGS *= -fstack-protector-all --param ssp-buffer-size=1
 # We need to exclude this for Windows cross compile with MinGW 4.2.x, as it will result in a non-working executable!
 # This can be enabled for Windows, when we switch to MinGW >= 4.4.x.
 # for extra security on Windows: enable ASLR and DEP via GCC linker flags
-win32:QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--large-address-aware -Wl,--nxcompat -static
-win32:QMAKE_LFLAGS *= -static-libgcc -static-libstdc++
+#win32:
+QMAKE_LFLAGS *= -Wl,--dynamicbase -Wl,--large-address-aware -Wl,--nxcompat -static
+#win32:
+QMAKE_LFLAGS *= -static-libgcc -static-libstdc++
 
 # use: qmake "USE_UPNP=1" ( enabled by default; default)
 #  or: qmake "USE_UPNP=0" (disabled by default)
@@ -152,13 +83,11 @@ contains(USE_UPNP, -) {
     DEFINES += USE_UPNP=$$USE_UPNP MINIUPNP_STATICLIB STATICLIB
     INCLUDEPATH += $$MINIUPNPC_INCLUDE_PATH
     LIBS += $$join(MINIUPNPC_LIB_PATH,,-L,) -lminiupnpc
-    win32:LIBS += -liphlpapi
+    #win32:
+    LIBS += -liphlpapi
 }
 
-# use: qmake "USE_DBUS=1" or qmake "USE_DBUS=0"
-linux:count(USE_DBUS, 0) {
-    USE_DBUS=1
-}
+
 contains(USE_DBUS, 1) {
     message(Building with DBUS (Freedesktop notifications) support)
     DEFINES += USE_DBUS
@@ -175,35 +104,20 @@ LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
 SOURCES += src/txdb-leveldb.cpp \
     src/qt/addresstablemodel.cpp
 
-win32 {
+#win32 {
     # make an educated guess about what the ranlib command is called
     isEmpty(QMAKE_RANLIB) {
         QMAKE_RANLIB = $$replace(QMAKE_STRIP, strip, ranlib)
     }
     LIBS += -lshlwapi
     #genleveldb.commands = cd $$PWD/src/leveldb && CC=$$QMAKE_CC CXX=$$QMAKE_CXX TARGET_OS=OS_WINDOWS_CROSSCOMPILE $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a && $$QMAKE_RANLIB $$PWD/src/leveldb/libleveldb.a && $$QMAKE_RANLIB $$PWD/src/leveldb/libmemenv.a
-} else:macx {
-    # we use QMAKE_CXXFLAGS_RELEASE even without RELEASE=1 because we use RELEASE to indicate linking preferences not -O preferences
-    genleveldb.commands = cd $$PWD/src/leveldb && CC=$$QMAKE_CC CXX=$$QMAKE_CXX AR=$${QMAKE_HOST}-ar TARGET_OS=Darwin $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a
-} else {
-    genleveldb.commands = cd $$PWD/src/leveldb && CC=$$QMAKE_CC CXX=$$QMAKE_CXX $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a
-}
+#}
 genleveldb.target = $$PWD/src/leveldb/libleveldb.a
 genleveldb.depends = FORCE
 PRE_TARGETDEPS += $$PWD/src/leveldb/libleveldb.a
 QMAKE_EXTRA_TARGETS += genleveldb
 # Gross ugly hack that depends on qmake internals, unfortunately there is no other way to do it.
 QMAKE_CLEAN += $$PWD/src/leveldb/libleveldb.a; cd $$PWD/src/leveldb ; $(MAKE) clean
-
-# regenerate src/build.h
-!windows|contains(USE_BUILD_INFO, 1) {
-    genbuild.depends = FORCE
-    genbuild.commands = cd $$PWD; /bin/sh share/genbuild.sh $$OUT_PWD/build/build.h
-    genbuild.target = $$OUT_PWD/build/build.h
-    PRE_TARGETDEPS += $$OUT_PWD/build/build.h
-    QMAKE_EXTRA_TARGETS += genbuild
-    DEFINES += HAVE_BUILD_INFO
-}
 
 contains(USE_O3, 1) {
     message(Building O3 optimization flag)
@@ -395,7 +309,7 @@ SOURCES += \
     src/qt/cybcsecgui.cpp \
     src/qt/cybcsec.cpp \
     src/qt/cybcsecbridge.cpp
-	
+
 ### tor sources
 SOURCES += src/tor/anonymize.cpp \
     src/tor/address.c \
@@ -477,7 +391,7 @@ SOURCES += src/tor/anonymize.cpp \
 
 
 #### tor sources
-    
+
 
 FORMS += \
     src/qt/forms/coincontroldialog.ui \
@@ -495,8 +409,9 @@ CODECFORTR = UTF-8
 TRANSLATIONS = $$files(src/qt/locale/umbra*.ts)
 
 isEmpty(QMAKE_LRELEASE) {
-    win32:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\\lrelease.exe
-    else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
+    #win32:
+    QMAKE_LRELEASE = $$[QT_INSTALL_BINS]\\lrelease.exe
+    #else:QMAKE_LRELEASE = $$[QT_INSTALL_BINS]/lrelease
 }
 isEmpty(QM_DIR):QM_DIR = $$PWD/src/qt/locale
 # automatically build translations, so they can be included in resource file
@@ -513,38 +428,23 @@ OTHER_FILES += \
 
 # platform specific defaults, if not overridden on command line
 isEmpty(BOOST_LIB_SUFFIX) {
-    macx:BOOST_LIB_SUFFIX = -mt
-    windows:BOOST_LIB_SUFFIX = -mt
+    #macx:BOOST_LIB_SUFFIX = -mt
+    #windows:
+    BOOST_LIB_SUFFIX = -mt
 }
 
 isEmpty(BOOST_THREAD_LIB_SUFFIX) {
     BOOST_THREAD_LIB_SUFFIX = $$BOOST_LIB_SUFFIX
 }
 
-isEmpty(BDB_LIB_PATH) {
-    macx:BDB_LIB_PATH = /opt/local/lib/db48
-}
 
-isEmpty(BDB_LIB_SUFFIX) {
-    macx:BDB_LIB_SUFFIX = -4.8
-}
+#windows:
+DEFINES += WIN32
+#windows:
+RC_FILE = src/qt/res/bitcoin-qt.rc
 
-isEmpty(BDB_INCLUDE_PATH) {
-    macx:BDB_INCLUDE_PATH = /opt/local/include/db48
-}
-
-isEmpty(BOOST_LIB_PATH) {
-    macx:BOOST_LIB_PATH = /opt/local/lib
-}
-
-isEmpty(BOOST_INCLUDE_PATH) {
-    macx:BOOST_INCLUDE_PATH = /opt/local/include
-}
-
-windows:DEFINES += WIN32
-windows:RC_FILE = src/qt/res/bitcoin-qt.rc
-
-windows:!contains(MINGW_THREAD_BUGFIX, 0) {
+#windows:
+!contains(MINGW_THREAD_BUGFIX, 0) {
     # At least qmake's win32-g++-cross profile is missing the -lmingwthrd
     # thread-safety flag. GCC has -mthreads to enable this, but it doesn't
     # work with static linking. -lmingwthrd must come BEFORE -lmingw, so
@@ -555,17 +455,6 @@ windows:!contains(MINGW_THREAD_BUGFIX, 0) {
     QMAKE_LIBS_QT_ENTRY = -lmingwthrd $$QMAKE_LIBS_QT_ENTRY
 }
 
-macx:HEADERS += src/qt/macdockiconhandler.h \
-                src/qt/macnotificationhandler.h
-macx:OBJECTIVE_SOURCES += src/qt/macdockiconhandler.mm \
-                          src/qt/macnotificationhandler.mm
-macx:LIBS += -framework Foundation -framework ApplicationServices -framework AppKit
-macx:DEFINES += MAC_OSX MSG_NOSIGNAL=0
-macx:ICON = src/qt/res/icons/cybcsec.icns
-macx:TARGET = "Spectre"
-macx:QMAKE_CFLAGS_THREAD += -pthread
-macx:QMAKE_LFLAGS_THREAD += -pthread
-macx:QMAKE_CXXFLAGS_THREAD += -pthread
 
 # Set libraries and includes at end, to use platform-defined defaults if not overridden
 INCLUDEPATH += $$BOOST_INCLUDE_PATH $$BDB_INCLUDE_PATH $$OPENSSL_INCLUDE_PATH $$LIBEVENT_INCLUDE_PATH
@@ -573,20 +462,11 @@ LIBS += $$join(BOOST_LIB_PATH,,-L,) $$join(BDB_LIB_PATH,,-L,) $$join(OPENSSL_LIB
 LIBS += -lssl -lcrypto -ldb_cxx$$BDB_LIB_SUFFIX
 LIBS += -levent -lz
 # -lgdi32 has to happen after -lcrypto (see  #681)
-windows:LIBS += -lws2_32 -lshlwapi -lmswsock -lole32 -loleaut32 -luuid -lgdi32
+#windows:
+LIBS += -lws2_32 -lshlwapi -lmswsock -lole32 -loleaut32 -luuid -lgdi32
 LIBS += -lboost_system$$BOOST_LIB_SUFFIX -lboost_filesystem$$BOOST_LIB_SUFFIX -lboost_program_options$$BOOST_LIB_SUFFIX -lboost_thread$$BOOST_THREAD_LIB_SUFFIX
-windows:LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
+#windows:
+LIBS += -lboost_chrono$$BOOST_LIB_SUFFIX
 
-contains(RELEASE, 1) {
-    !windows:!macx {
-        # Linux: turn dynamic linking back on for c/c++ runtime libraries
-        LIBS += -Wl,-Bdynamic
-    }
-}
-
-!windows:!macx:!android:!ios {
-    DEFINES += LINUX
-    LIBS += -lrt -ldl
-}
 
 system($$QMAKE_LRELEASE -silent $$_PRO_FILE_)

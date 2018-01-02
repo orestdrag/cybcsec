@@ -239,8 +239,8 @@ int main(int argc, char *argv[])
                 
                 paymentServer->setOptionsModel(&optionsModel);
                 
-                if (splashref)
-                    splash.finish(&window);
+                //if (splashref)
+                //    splash.finish(&window);
 
                 ClientModel clientModel(&optionsModel);
                 WalletModel walletModel(pwalletMain, &optionsModel);
