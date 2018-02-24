@@ -1140,7 +1140,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     if (nNodeMode != NT_FULL)
         pwalletMain->InitBloomFilter();
 
-    //uiInterface.InitMessage(_("Done loading"));
+    uiInterface.InitMessage(_("Done loading"));
     LogPrintf("Done loading.\n");
 
     if (!strErrors.str().empty())

@@ -639,8 +639,7 @@ Value getreceivedbyaccount(const Array& params, bool fHelp)
         BOOST_FOREACH(const CTxOut& txout, wtx.vout)
         {
             CTxDestination address;
-            if (ExtractDestination(txout.scriptPubKey, address) && IsDestMine(*pwalletMain, address)
-                    && setAddress.count(address))
+            if (ExtractDestination(txout.scriptPubKey, address) && IsDestMine(*pwalletMain, address) && setAddress.count(address))
                 if (wtx.GetDepthInMainChain() >= nMinDepth)
                     nAmount += txout.nValue;
         };
@@ -967,7 +966,7 @@ CScript _createmultisig_redeemScript(const Array& params)
 
 Value addmultisigaddress(const Array& params, bool fHelp)
 {
-    if (!fHelp || params.size() < 2 || params.size() > 3)
+    if (fHelp || params.size() < 2 || params.size() > 3)
     {
         std::string msg = "addmultisigaddress <nrequired> <'[\"key\",\"key\"]'> [account]\n"
             "Add a nrequired-to-sign multisignature address to the wallet\"\n"
